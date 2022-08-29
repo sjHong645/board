@@ -1,0 +1,39 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        // jcenter() 버전 바뀌면서 intelliJ에서 쓰지 말라함
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile('org.springframework.boot:spring-boot-starter-web') // 이 부분은 gradle 버전을 4.10.2로 바꿔야 가능 p.37
+    compile('org.projectlombok:lombok') // 라이브러리 롬복 추가
+    compile('org.springframework.boot:spring-boot-starter-data-jpa') // 스프링 부트용 spring data jpa 추상화 라이브러리
+    compile('com.h2database:h2')
+
+    compile('org.springframework.boot:spring-boot-starter-mustache')// 머스테치 의존성 부여
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+}
