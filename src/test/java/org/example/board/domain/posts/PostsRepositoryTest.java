@@ -1,5 +1,6 @@
 package org.example.board.domain.posts;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.After;
@@ -48,6 +49,32 @@ public class PostsRepositoryTest {
         assertThat(posts.getTitle()).isEqualTo(title);
         assertThat(posts.getContent()).isEqualTo(content);
         assertThat(posts.getAuthor()).isEqualTo(author);
+
+    }
+
+    @Test
+    public void BaseTimeEntity_saved() {
+
+        // given
+        LocalDateTime now = LocalDateTime.of(2022, 8, 29, 10, 10, 0);
+
+        postsRepository.save(Posts.builder()
+                .title("title")
+                .content("content")
+                .author("author")
+                .build());
+
+        // when
+        List<Posts> postsList = postsRepository.findAll();
+
+        // then
+        Posts posts = postsList.get(0);
+
+        System.out.println(">>>>>> createdDate = " + posts.getCreatedDate()
+        + ", modifiedDate = " + posts.getModifiedDate());
+
+        assertThat(posts.getCreatedDate()).isAfter(now);
+        assertThat(posts.getModifiedDate()).isAfter(now);
 
     }
 

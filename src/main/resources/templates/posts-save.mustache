@@ -1,0 +1,30 @@
+{{>layout/header}}
+
+<h1>게시글 등록</h1>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="author"> 작성자 </label>
+                <input type="text" class="form-control" id="author" placeholder="작성자를 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="content"> 내용 </label>
+                <textarea class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
+            </div>
+        </form>
+        <!-- '취소'라는 이름의 버튼을 누르면 url "/"로 돌아간다. -->
+        <a href="/" role="button" class="btn btn-secondary">취소</a>
+
+        <!-- 이제 등록 버튼을 눌렀을 때 실제로 저장되도록 해야 하는데 그걸 index.js 라는 javascript 파일에서 처리할 거다.-->
+        <!-- 해당 버튼을 누르면 -->
+        <button type="button" class="btn btn-primary" id="btn-save">등록</button>
+    </div>
+</div>
+
+{{>layout/footer}}
