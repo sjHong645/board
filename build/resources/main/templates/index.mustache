@@ -1,6 +1,7 @@
 {{>layout/header}}
 
 <h1>게시판 구현</h1>
+<form action = "/posts/delete" method = "GET"> <!-- DELETE 호출이 없다. -->
 <div class = "col-md-12">
     <div class="row">
         <div class="col-md-6">
@@ -8,6 +9,8 @@
             <!-- 그러면 IndexController에서 해당 url을 GetMapping 했기 때문에-->
             <!-- return 한 값 posts-save.mustache 파일로 이동한다. -->
             <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+            <!-- <input type = "button" id = "deleteButton" value = "글 삭제" class = "btn btn-danger" /> -->
+            <button type = "submit" class = "btn btn-danger">글 삭제</button>
         </div>
     </div>
 
@@ -16,6 +19,7 @@
     <table class="table table-horizontal table-bordered">
         <thead class="thead-strong">
         <tr>
+            <th> </th>
             <th>게시글번호</th>
             <th>제목</th>
             <th>작성자</th>
@@ -25,6 +29,7 @@
         <tbody id="tbody">
         {{#posts}}
             <tr>
+                <td><input type = "checkbox" id = "id" name = "checkedItem" value = {{id}}></td>
                 <td>{{id}}</td>
                 <td><a href="/posts/update/{{id}}">{{title}}</a></td>
                 <td>{{author}}</td>
@@ -34,6 +39,7 @@
         </tbody>
     </table>
 </div>
+</form>
 
 
 {{>layout/footer}}

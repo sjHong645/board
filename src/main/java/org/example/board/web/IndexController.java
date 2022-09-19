@@ -1,5 +1,7 @@
 package org.example.board.web;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.example.board.service.posts.PostsService;
 import org.example.board.web.dto.PostsResponseDto;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 // index.mustache 파일에 url을 매핑하기 위해서 IndexController라는 클래스 설정
 @RequiredArgsConstructor
@@ -40,6 +42,19 @@ public class IndexController {
         model.addAttribute("post", dto);
 
         return "posts-update";
+    }
+
+    @GetMapping("/posts/delete")
+    public String postsDelete(@RequestParam List<Long> checkedItem){
+
+        for(Long id : checkedItem) {
+            postsService.delete(id);
+        }
+
+        // '/'을 전달해야 index.mustache 파일이 화면에 출력되니까
+        // redirect:/ 를 return하도록 했다.
+        return "redirect:/";
+
     }
 
 }
