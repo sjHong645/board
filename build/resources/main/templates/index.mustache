@@ -1,7 +1,7 @@
 {{>layout/header}}
 
 <h1>게시판 구현</h1>
-<form action = "/posts/delete" method = "GET"> <!-- DELETE 호출이 없다. -->
+<form action = "/posts/delete" method = "GET"> <!-- checkbox에서 선택한 값들을 삭제 할 때 사용한 태그 -->
 <div class = "col-md-12">
     <div class="row">
         <div class="col-md-6">
@@ -9,7 +9,7 @@
             <!-- 그러면 IndexController에서 해당 url을 GetMapping 했기 때문에-->
             <!-- return 한 값 posts-save.mustache 파일로 이동한다. -->
             <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
-            <!-- <input type = "button" id = "deleteButton" value = "글 삭제" class = "btn btn-danger" /> -->
+
             <button type = "submit" class = "btn btn-danger">글 삭제</button>
         </div>
     </div>
@@ -24,16 +24,18 @@
             <th>제목</th>
             <th>작성자</th>
             <th>최종수정일</th>
+            <th>내용</th>
         </tr>
         </thead>
         <tbody id="tbody">
-        {{#posts}}
+        {{#posts}} <!-- 이건 IndexController에서 model.addAttribute를 통해 posts를 전달한 거다 -->
             <tr>
                 <td><input type = "checkbox" id = "id" name = "checkedItem" value = {{id}}></td>
                 <td>{{id}}</td>
                 <td><a href="/posts/update/{{id}}">{{title}}</a></td>
                 <td>{{author}}</td>
                 <td>{{modifiedDate}}</td>
+                <td>{{content}}</td>
             </tr>
         {{/posts}}
         </tbody>

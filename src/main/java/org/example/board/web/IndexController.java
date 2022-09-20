@@ -45,7 +45,7 @@ public class IndexController {
     }
 
     @GetMapping("/posts/delete")
-    public String postsDelete(@RequestParam List<Long> checkedItem){
+    public String postsSeveralDelete(@RequestParam List<Long> checkedItem){
 
         for(Long id : checkedItem) {
             postsService.delete(id);
