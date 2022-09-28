@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.example.board.service.posts.PostsService;
 import org.example.board.web.dto.PostsResponseDto;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -23,14 +24,23 @@ public class IndexController {
     public String index(Model model) {
 
         // posts 속성의 값을 index.mustache에 전달
-        model.addAttribute("posts", postsService.findAllDesc());
+        model.addAttribute("posts", postsService.findAll("id"));
+
         return "index"; // 이렇게 문자열을 반환하면 .mustache 파일이 View Resolver에 의해 처리됨
+    }
+
+    @GetMapping("/sort")
+    public String sortingIndex(@RequestParam String column, Model model) {
+
+        // 전달받은 column을 기준으로 오름차순해서 보낸다.
+
+        // 내림차순은??
+        model.addAttribute("posts", postsService.findAll(column));
+        return "index";
     }
 
     // /posts/save라는 url로 이동하면
     // posts-save.mustache 라는 파일로 이동할 거다.
-
-    // 아직, 안 만들었으니까 만들러 가자.
     @GetMapping("/posts/save")
     public String postsSave() {
         return "posts-save";

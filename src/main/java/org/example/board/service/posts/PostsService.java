@@ -10,6 +10,8 @@ import org.example.board.web.dto.PostsListResponseDto;
 import org.example.board.web.dto.PostsResponseDto;
 import org.example.board.web.dto.PostsSaveRequestDto;
 import org.example.board.web.dto.PostsUpdateRequestDto;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,12 +44,16 @@ public class PostsService {
         return id;
     }
 
-    @Transactional(readOnly = true) // 트랜잭셤 범위 유지 & 조회속도는 개선됨.
-                                    // 등록, 수정, 삭제 기능이 전혀 없기때문에 사용함
-    public List<PostsListResponseDto> findAllDesc() {
-        return postsRepository.findAllDesc().stream()
-                              .map(PostsListResponseDto::new)
-                              .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAll(String column) {
+
+        // column를 기준으로 오름차순
+        return postsRepository.findAll(Sort.by(column)).stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+
+        // 아직 내림차순은 구현하지 않았음
+
     }
 
     public PostsResponseDto findById(Long id) {

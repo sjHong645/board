@@ -2,8 +2,8 @@ package org.example.board.domain.posts;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 // Posts 클래스로 DB를 접근하게 해줄 인터페이스 = DB Layer 접근자 -> JPA에서는 Repository라고 함
 // 아래와 같이 인터페이스 생성 후
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 // 해당 인터페이스는 Entity와 같은 위치에 있어야 함
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
-    @Query("SELECT p from Posts p order by p.id desc")
-    List<Posts> findAllDesc();
+    @Override
+    List<Posts> findAll(Sort sort);
 
 }
