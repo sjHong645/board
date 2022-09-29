@@ -24,18 +24,23 @@ public class IndexController {
     public String index(Model model) {
 
         // posts 속성의 값을 index.mustache에 전달
-        model.addAttribute("posts", postsService.findAll("id"));
+        model.addAttribute("posts", postsService.findAllDesc("id"));
 
         return "index"; // 이렇게 문자열을 반환하면 .mustache 파일이 View Resolver에 의해 처리됨
     }
 
     @GetMapping("/sort")
-    public String sortingIndex(@RequestParam String column, Model model) {
+    public String sortingIndex(@RequestParam String column,
+                               @RequestParam String sort, Model model) {
 
         // 전달받은 column을 기준으로 오름차순해서 보낸다.
 
-        // 내림차순은??
-        model.addAttribute("posts", postsService.findAll(column));
+        // 오름차순일 때
+        if(sort.equals("asc")) model.addAttribute("posts", postsService.findAllAsc(column));
+
+        // 내림차순일 때
+        else if(sort.equals("desc")) model.addAttribute("posts", postsService.findAllDesc(column));
+
         return "index";
     }
 

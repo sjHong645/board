@@ -45,14 +45,22 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAll(String column) {
+    public List<PostsListResponseDto> findAllAsc(String column) {
 
-        // column를 기준으로 오름차순
-        return postsRepository.findAll(Sort.by(column)).stream()
+        // column 기준으로 오름차순
+        return postsRepository.findAll(Sort.by(column).ascending()).stream()
                 .map(PostsListResponseDto::new)
                 .collect(Collectors.toList());
 
-        // 아직 내림차순은 구현하지 않았음
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc(String column) {
+
+        // column 기준으로 내림차순
+        return postsRepository.findAll(Sort.by(column).descending()).stream()
+                              .map(PostsListResponseDto::new)
+                              .collect(Collectors.toList());
 
     }
 

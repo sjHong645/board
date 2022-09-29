@@ -20,22 +20,22 @@
         <thead class="thead-strong">
         <tr>
             <th> </th>
-            <th>게시글번호</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>최종수정일</th>
-            <th>내용</th>
+            <th>게시글번호<a href = "/sort?column=id&sort=desc">▼</a><a href = "/sort?column=id&sort=asc">▲</a></th>
+            <th>제목<a href = "/sort?column=title&sort=desc">▼</a><a href = "/sort?column=title&sort=asc">▲</a></th>
+            <th>작성자<a href = "/sort?column=author&sort=desc">▼</a><a href = "/sort?column=author&sort=asc">▲</a></th>
+            <th>내용<a href = "/sort?column=content&sort=desc">▼</a><a href = "/sort?column=content&sort=asc">▲</a></th>
+            <th>최종수정일<a href = "/sort?column=modifiedDate&sort=desc">▼</a><a href = "/sort?column=modifiedDate&sort=asc">▲</a></th>
         </tr>
         </thead>
         <tbody id="tbody">
-        {{#posts}} <!-- 이건 IndexController에서 model.addAttribute를 통해 posts를 전달한 거다 -->
+        {{#posts}}
             <tr>
                 <td><input type = "checkbox" id = "id" name = "checkedItem" value = {{id}}></td>
                 <td>{{id}}</td>
                 <td><a href="/posts/update/{{id}}">{{title}}</a></td>
                 <td>{{author}}</td>
-                <td>{{modifiedDate}}</td>
                 <td>{{content}}</td>
+                <td>{{modifiedDate}}</td>
             </tr>
         {{/posts}}
         </tbody>
