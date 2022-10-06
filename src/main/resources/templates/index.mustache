@@ -1,7 +1,7 @@
 {{>layout/header}}
 
 <h1>게시판 구현</h1>
-<form action = "/posts/delete" method = "GET"> <!-- checkbox에서 선택한 값들을 삭제 할 때 사용한 태그 -->
+ <!-- checkbox에서 선택한 값들을 삭제 할 때 사용한 태그 -->
 <div class = "col-md-12">
     <div class="row">
         <div class="col-md-6">
@@ -10,7 +10,14 @@
             <!-- return 한 값 posts-save.mustache 파일로 이동한다. -->
             <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
 
-            <button type = "submit" class = "btn btn-danger">글 삭제</button>
+
+
+
+        <form action = "/posts/search" method = "GET">
+            <input name = "keyword" type = "text" placeholder = "검색어를 입력하세요">
+        </form>
+
+
         </div>
     </div>
 
@@ -28,20 +35,23 @@
         </tr>
         </thead>
         <tbody id="tbody">
-        {{#posts}}
-            <tr>
-                <td><input type = "checkbox" id = "id" name = "checkedItem" value = {{id}}></td>
-                <td>{{id}}</td>
-                <td><a href="/posts/update/{{id}}">{{title}}</a></td>
-                <td>{{author}}</td>
-                <td>{{content}}</td>
-                <td>{{modifiedDate}}</td>
-            </tr>
-        {{/posts}}
+        <form action = "/posts/delete" method = "GET">
+            {{#posts}}
+                <tr>
+                    <td><input type = "checkbox" id = "id" name = "checkedItem" value = {{id}}></td>
+                    <td>{{id}}</td>
+                    <td><a href="/posts/update/{{id}}">{{title}}</a></td>
+                    <td>{{author}}</td>
+                    <td>{{content}}</td>
+                    <td>{{modifiedDate}}</td>
+                </tr>
+            {{/posts}}
+            <button type = "submit" class = "btn btn-danger">글 삭제</button>
+        </form>
         </tbody>
     </table>
 </div>
-</form>
+
 
 
 {{>layout/footer}}
