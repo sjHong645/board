@@ -64,6 +64,16 @@ public class PostsService {
 
     }
 
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> searchPosts(String keyword) {
+
+        // 일단 'title'을 검색하도록 했다.
+        return postsRepository.findByTitleContaining(keyword).stream()
+                              .map(PostsListResponseDto::new)
+                              .collect(Collectors.toList());
+
+    }
+
     public PostsResponseDto findById(Long id) {
         Posts entity = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));

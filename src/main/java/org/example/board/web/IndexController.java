@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.example.board.service.posts.PostsService;
+import org.example.board.web.dto.PostsListResponseDto;
 import org.example.board.web.dto.PostsResponseDto;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -71,5 +72,17 @@ public class IndexController {
         return "redirect:/";
 
     }
+
+    @GetMapping("/posts/search")
+    public String postsSearch(@RequestParam String keyword, Model model) {
+
+        List<PostsListResponseDto> postsList = postsService.searchPosts(keyword);
+        model.addAttribute("posts", postsList); // index.mustache에서 posts에 있는 값을 return한다.
+                                                            // index 메소드 참고하면 된다.
+
+        return "index";
+    }
+
+
 
 }
