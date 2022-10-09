@@ -12,6 +12,7 @@ import org.example.board.web.dto.PostsSaveRequestDto;
 import org.example.board.web.dto.PostsUpdateRequestDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,15 @@ public class PostsService {
 
         return id;
     }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAll(Specification spec) {
+
+        return postsRepository.findAll(spec).stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
 
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findAllAsc(String column) {

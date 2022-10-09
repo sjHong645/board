@@ -1,12 +1,15 @@
 package org.example.board.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.example.board.service.posts.PostsService;
 import org.example.board.web.dto.PostsListResponseDto;
 import org.example.board.web.dto.PostsResponseDto;
+import org.example.board.web.dto.PostsSearchCriteriaDto;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -76,9 +79,26 @@ public class IndexController {
     @GetMapping("/posts/search")
     public String postsSearch(@RequestParam String keyword, Model model) {
 
-        List<PostsListResponseDto> postsList = postsService.searchPosts(keyword);
-        model.addAttribute("posts", postsList); // index.mustache에서 posts에 있는 값을 return한다.
+        // List<PostsListResponseDto> postsList = postsService.searchPosts(keyword);
+        // model.addAttribute("posts", postsList); // index.mustache에서 posts에 있는 값을 return한다.
                                                             // index 메소드 참고하면 된다.
+
+        SearchSpecification spec1
+                = new SearchSpecification(new PostsSearchCriteriaDto("title", keyword));
+
+        SearchSpecification spec2
+                = new SearchSpecification(new PostsSearchCriteriaDto("author", keyword));
+
+        SearchSpecification spec3
+                = new SearchSpecification(new PostsSearchCriteriaDto("content", keyword));
+
+
+        List<PostsListResponseDto> result
+                = postsService.findAll(Specification.where(spec1).or(spec2).or(spec3));
+
+        model.addAttribute("posts", result);
+
+
 
         return "index";
     }
