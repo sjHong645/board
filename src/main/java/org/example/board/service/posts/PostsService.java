@@ -1,5 +1,6 @@
 package org.example.board.service.posts;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,8 +10,9 @@ import org.example.board.domain.posts.PostsRepository;
 import org.example.board.web.dto.PostsListResponseDto;
 import org.example.board.web.dto.PostsResponseDto;
 import org.example.board.web.dto.PostsSaveRequestDto;
+import org.example.board.web.dto.PostsSearchTargetDto;
 import org.example.board.web.dto.PostsUpdateRequestDto;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,26 @@ public class PostsService {
         return id;
     }
 
+    @Transactional
+    public String[] getColumnName() {
+
+        PostsSearchTargetDto postsTarget = new PostsSearchTargetDto();
+
+        // _columns[0] = id를 가리키는 Field
+        // indexController에서 화면에 출력할 때 중복을 방지하기 위해서 id를 넣었음
+        Field[] _columns = postsTarget.getClass().getDeclaredFields();
+
+        String[] columns = new String[_columns.length-1];
+
+        for(int i = 1; i < _columns.length; i++) {
+            _columns[i].setAccessible(true);
+            columns[i-1] = _columns[i].getName();
+        }
+
+        return columns;
+
+    }
+
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findAll(Specification spec) {
 
@@ -69,16 +91,6 @@ public class PostsService {
 
         // column 기준으로 내림차순
         return postsRepository.findAll(Sort.by(column).descending()).stream()
-                              .map(PostsListResponseDto::new)
-                              .collect(Collectors.toList());
-
-    }
-
-    @Transactional(readOnly = true)
-    public List<PostsListResponseDto> searchPosts(String keyword) {
-
-        // 일단 'title'을 검색하도록 했다.
-        return postsRepository.findByTitleContaining(keyword).stream()
                               .map(PostsListResponseDto::new)
                               .collect(Collectors.toList());
 

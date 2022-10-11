@@ -29,8 +29,19 @@ public class PostsListResponseDto {
         // 그렇지 않다면 전부 출력
         else this.content = entity.getContent();
 
+    }
 
+    @Override
+    public boolean equals(Object o) {
 
+        PostsListResponseDto postsListResponseDto = (PostsListResponseDto) o;
+        return postsListResponseDto.id == this.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
 }

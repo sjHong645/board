@@ -1,14 +1,15 @@
 package org.example.board.web;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.example.board.service.posts.PostsService;
 import org.example.board.web.dto.PostsListResponseDto;
 import org.example.board.web.dto.PostsResponseDto;
 import org.example.board.web.dto.PostsSearchCriteriaDto;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -79,25 +80,24 @@ public class IndexController {
     @GetMapping("/posts/search")
     public String postsSearch(@RequestParam String keyword, Model model) {
 
-        // List<PostsListResponseDto> postsList = postsService.searchPosts(keyword);
-        // model.addAttribute("posts", postsList); // index.mustache에서 posts에 있는 값을 return한다.
-                                                            // index 메소드 참고하면 된다.
+        String[] columns = postsService.getColumnName();
 
-        SearchSpecification spec1
-                = new SearchSpecification(new PostsSearchCriteriaDto("title", keyword));
+        SearchSpecification[] specs = new SearchSpecification[columns.length];
 
-        SearchSpecification spec2
-                = new SearchSpecification(new PostsSearchCriteriaDto("author", keyword));
+        for(int i = 0; i < specs.length; i++) {
+            specs[i] = new SearchSpecification(new PostsSearchCriteriaDto(columns[i], keyword));
+        }
 
-        SearchSpecification spec3
-                = new SearchSpecification(new PostsSearchCriteriaDto("content", keyword));
+        List<PostsListResponseDto> result = new LinkedList<>();
 
+        for(SearchSpecification spc : specs) {
+            result.addAll(postsService.findAll(Specification.where(spc)));
+        }
 
-        List<PostsListResponseDto> result
-                = postsService.findAll(Specification.where(spec1).or(spec2).or(spec3));
+        // result의 자료형은 PostsListResponseDto이다.
+        // PostsSearchTargetDto에 할 게 아니라 PostsListResponseDto에 equals 관련 정의를 해야 한다.
 
-        model.addAttribute("posts", result);
-
+        model.addAttribute("posts", result.stream().distinct().collect(Collectors.toList()));
 
 
         return "index";

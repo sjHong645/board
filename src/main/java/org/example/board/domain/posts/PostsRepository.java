@@ -22,7 +22,4 @@ public interface PostsRepository
     @Override
     List<Posts> findAll(Specification spec);
 
-    List<Posts> findByTitleContaining(String keyword);
-
-
 }
