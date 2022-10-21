@@ -10,7 +10,10 @@ import org.example.board.web.dto.PostsListResponseDto;
 import org.example.board.web.dto.PostsResponseDto;
 import org.example.board.web.dto.PostsSearchCriteriaDto;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -26,10 +29,12 @@ public class IndexController {
     private final PostsService postsService;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model,
+    @PageableDefault(size = 3,  sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         // posts 속성의 값을 index.mustache에 전달
-        model.addAttribute("posts", postsService.findAllDesc("id"));
+        // model.addAttribute("posts", postsService.findAllDesc("id"));
+        model.addAttribute("posts", postsService.findAllPage(pageable));
 
         return "index"; // 이렇게 문자열을 반환하면 .mustache 파일이 View Resolver에 의해 처리됨
     }

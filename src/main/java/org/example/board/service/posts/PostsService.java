@@ -13,6 +13,8 @@ import org.example.board.web.dto.PostsSaveRequestDto;
 import org.example.board.web.dto.PostsSearchTargetDto;
 import org.example.board.web.dto.PostsUpdateRequestDto;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -65,6 +67,11 @@ public class PostsService {
 
         return columns;
 
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostsListResponseDto> findAllPage(Pageable pageable) {
+        return postsRepository.findAll(pageable).map(PostsListResponseDto::new);
     }
 
     @Transactional(readOnly = true)
