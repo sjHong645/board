@@ -1,8 +1,6 @@
 package org.example.board.web;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import org.example.board.service.posts.PostsService;
@@ -10,9 +8,9 @@ import org.example.board.web.dto.PostsListResponseDto;
 import org.example.board.web.dto.PostsResponseDto;
 import org.example.board.web.dto.PostsSearchCriteriaDto;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +31,6 @@ public class IndexController {
     @PageableDefault(size = 3,  sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         // posts 속성의 값을 index.mustache에 전달
-        // model.addAttribute("posts", postsService.findAllDesc("id"));
         model.addAttribute("posts", postsService.findAllPage(pageable));
 
         return "index"; // 이렇게 문자열을 반환하면 .mustache 파일이 View Resolver에 의해 처리됨
@@ -42,6 +39,8 @@ public class IndexController {
     @GetMapping("/sort")
     public String sortingIndex(@RequestParam String column,
                                @RequestParam String sort, Model model) {
+
+        // pageable에서 기본적으로 사용하는 파라미터 size, sot, direction
 
         // 전달받은 column을 기준으로 오름차순해서 보낸다.
 
@@ -83,27 +82,16 @@ public class IndexController {
     }
 
     @GetMapping("/posts/search")
-    public String postsSearch(@RequestParam String keyword, Model model) {
+    public String postsSearch(@RequestParam String keyword, Model model,
+                              @PageableDefault(size = 3) Pageable pageable) {
 
         String[] columns = postsService.getColumnName();
 
-        SearchSpecification[] specs = new SearchSpecification[columns.length];
+        SearchSpecification searchSpecification = new SearchSpecification((new PostsSearchCriteriaDto(columns, keyword)));
 
-        for(int i = 0; i < specs.length; i++) {
-            specs[i] = new SearchSpecification(new PostsSearchCriteriaDto(columns[i], keyword));
-        }
+        Page<PostsListResponseDto> pages = postsService.findAllPage(searchSpecification, pageable);
 
-        List<PostsListResponseDto> result = new LinkedList<>();
-
-        for(SearchSpecification spc : specs) {
-            result.addAll(postsService.findAll(Specification.where(spc)));
-        }
-
-        // result의 자료형은 PostsListResponseDto이다.
-        // PostsSearchTargetDto에 할 게 아니라 PostsListResponseDto에 equals 관련 정의를 해야 한다.
-
-        model.addAttribute("posts", result.stream().distinct().collect(Collectors.toList()));
-
+        model.addAttribute("posts", pages);
 
         return "index";
     }

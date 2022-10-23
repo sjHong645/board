@@ -75,13 +75,9 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAll(Specification spec) {
-
-        return postsRepository.findAll(spec).stream()
-                .map(PostsListResponseDto::new)
-                .collect(Collectors.toList());
+    public Page<PostsListResponseDto> findAllPage(Specification specification, Pageable pageable) {
+        return postsRepository.findAll(specification, pageable).map(PostsListResponseDto::new);
     }
-
 
     @Transactional(readOnly = true)
     public List<PostsListResponseDto> findAllAsc(String column) {
