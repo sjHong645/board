@@ -13,6 +13,8 @@ import org.example.board.web.dto.PostsSaveRequestDto;
 import org.example.board.web.dto.PostsSearchTargetDto;
 import org.example.board.web.dto.PostsUpdateRequestDto;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -68,32 +70,13 @@ public class PostsService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAll(Specification spec) {
-
-        return postsRepository.findAll(spec).stream()
-                .map(PostsListResponseDto::new)
-                .collect(Collectors.toList());
-    }
-
-
-    @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAllAsc(String column) {
-
-        // column 기준으로 오름차순
-        return postsRepository.findAll(Sort.by(column).ascending()).stream()
-                .map(PostsListResponseDto::new)
-                .collect(Collectors.toList());
-
+    public Page<PostsListResponseDto> findAllPage(Pageable pageable) {
+        return postsRepository.findAll(pageable).map(PostsListResponseDto::new);
     }
 
     @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAllDesc(String column) {
-
-        // column 기준으로 내림차순
-        return postsRepository.findAll(Sort.by(column).descending()).stream()
-                              .map(PostsListResponseDto::new)
-                              .collect(Collectors.toList());
-
+    public Page<PostsListResponseDto> findAllPage(Specification specification, Pageable pageable) {
+        return postsRepository.findAll(specification, pageable).map(PostsListResponseDto::new);
     }
 
     public PostsResponseDto findById(Long id) {
