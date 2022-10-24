@@ -79,26 +79,6 @@ public class PostsService {
         return postsRepository.findAll(specification, pageable).map(PostsListResponseDto::new);
     }
 
-    @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAllAsc(String column) {
-
-        // column 기준으로 오름차순
-        return postsRepository.findAll(Sort.by(column).ascending()).stream()
-                .map(PostsListResponseDto::new)
-                .collect(Collectors.toList());
-
-    }
-
-    @Transactional(readOnly = true)
-    public List<PostsListResponseDto> findAllDesc(String column) {
-
-        // column 기준으로 내림차순
-        return postsRepository.findAll(Sort.by(column).descending()).stream()
-                              .map(PostsListResponseDto::new)
-                              .collect(Collectors.toList());
-
-    }
-
     public PostsResponseDto findById(Long id) {
         Posts entity = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));

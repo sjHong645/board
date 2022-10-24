@@ -26,9 +26,11 @@ public class IndexController {
 
     private final PostsService postsService;
 
+    private final int pageSize = 3;
+
     @GetMapping("/")
     public String index(Model model,
-    @PageableDefault(size = 3,  sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    @PageableDefault(size = pageSize, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         // posts 속성의 값을 index.mustache에 전달
         model.addAttribute("posts", postsService.findAllPage(pageable));
@@ -37,18 +39,10 @@ public class IndexController {
     }
 
     @GetMapping("/sort")
-    public String sortingIndex(@RequestParam String column,
-                               @RequestParam String sort, Model model) {
+    public String sortingIndex(Model model,
+                               @PageableDefault(size = pageSize) Pageable pageable) {
 
-        // pageable에서 기본적으로 사용하는 파라미터 size, sot, direction
-
-        // 전달받은 column을 기준으로 오름차순해서 보낸다.
-
-        // 오름차순일 때
-        if(sort.equals("asc")) model.addAttribute("posts", postsService.findAllAsc(column));
-
-        // 내림차순일 때
-        else if(sort.equals("desc")) model.addAttribute("posts", postsService.findAllDesc(column));
+        model.addAttribute("posts", postsService.findAllPage(pageable));
 
         return "index";
     }
@@ -83,7 +77,7 @@ public class IndexController {
 
     @GetMapping("/posts/search")
     public String postsSearch(@RequestParam String keyword, Model model,
-                              @PageableDefault(size = 3) Pageable pageable) {
+                              @PageableDefault(size = pageSize) Pageable pageable) {
 
         String[] columns = postsService.getColumnName();
 
