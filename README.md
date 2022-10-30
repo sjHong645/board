@@ -10,7 +10,6 @@ Spring Boot, JPA를 이용한 CRUD 게시판 + 지속적인 기능 추가
   <img src="https://img.shields.io/badge/Spring Data JPA-43853D?logo=spring"/> 
 </br>
   <img src="https://img.shields.io/badge/gradle-4.10.2-232F3E?logo=gradle"/>
-  <img src="https://img.shields.io/badge/Junit5-232F3E?logo=Junit5"/>
 </div>
 <br/>
 
